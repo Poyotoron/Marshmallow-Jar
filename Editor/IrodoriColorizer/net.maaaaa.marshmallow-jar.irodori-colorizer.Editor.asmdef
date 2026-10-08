@@ -1,0 +1,24 @@
+{
+    "name": "net.maaaaa.marshmallow-jar.irodori-colorizer.Editor",
+    "rootNamespace": "Poyo.MarshmallowJar.IrodoriColorizer.Editor",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "!MARSHMALLOW_JAR_HAS_STANDALONE_COLORIZER"
+    ],
+    "versionDefines": [
+        {
+            "name": "net.maaaaa.irodori-colorizer",
+            "expression": "0.0.0",
+            "define": "MARSHMALLOW_JAR_HAS_STANDALONE_COLORIZER"
+        }
+    ],
+    "noEngineReferences": false
+}
