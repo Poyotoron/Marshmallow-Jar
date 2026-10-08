@@ -1,0 +1,27 @@
+{
+    "name": "net.maaaaa.marshmallow-jar.Editor",
+    "rootNamespace": "Poyo.MarshmallowJar.Editor",
+    "references": [],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.vrchat.avatars",
+            "expression": "[3.10.0,4.0.0)",
+            "define": "MARSHMALLOW_JAR_HAS_VRCSDK"
+        },
+        {
+            "name": "net.maaaaa.irodori-colorizer",
+            "expression": "0.0.0",
+            "define": "MARSHMALLOW_JAR_HAS_STANDALONE_COLORIZER"
+        }
+    ],
+    "noEngineReferences": false
+}
