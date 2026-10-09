@@ -13,6 +13,9 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         private static readonly Color ProBackground = new Color(0.219f, 0.219f, 0.219f);
         private static readonly Color PersonalBackground = new Color(0.760f, 0.760f, 0.760f);
         private static readonly Color DarkText = new Color(0.06f, 0.06f, 0.06f);
+        // NOTE: 表示名を保持すると、行の再描画ごとに名前を生成したりパッケージ情報を調べたりせずに済む。
+        private static readonly Dictionary<string, string> ProjectDisplayNames =
+            new Dictionary<string, string>(StringComparer.Ordinal);
 
         private static Dictionary<string, string> _projectMap;
         private static GUIStyle _labelStyle;
@@ -43,6 +46,7 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         /// <summary>設定変更後に参照キャッシュを破棄する。</summary>
         public static void Invalidate()
         {
+            ProjectDisplayNames.Clear();
             _projectMap = null;
             IrodoriLabelResolver.Invalidate();
             IrodoriHierarchy.Invalidate();
@@ -161,8 +165,30 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
                 GUI.DrawTexture(GetIconRect(selectionRect), icon, ScaleMode.ScaleToFit, true);
             }
 
-            string name = Path.GetFileNameWithoutExtension(path);
+            string name = GetProjectDisplayName(guid, path);
             DrawName(selectionRect, name, GetTextColor(blended, settings), 1f, settings.labelIndent);
+        }
+
+        private static string GetProjectDisplayName(string guid, string path)
+        {
+            if (ProjectDisplayNames.TryGetValue(guid, out string cached))
+            {
+                return cached;
+            }
+
+            string name = Path.GetFileNameWithoutExtension(path);
+            // NOTE: Unity は Packages 直下のフォルダにパッケージの表示名を出すため、色付きの行の名前も合わせる。
+            if (path.StartsWith("Packages/", StringComparison.Ordinal) && path.IndexOf('/', "Packages/".Length) < 0)
+            {
+                UnityEditor.PackageManager.PackageInfo info = UnityEditor.PackageManager.PackageInfo.FindForAssetPath(path);
+                if (info != null && info.assetPath == path && !string.IsNullOrEmpty(info.displayName))
+                {
+                    name = info.displayName;
+                }
+            }
+
+            ProjectDisplayNames[guid] = name;
+            return name;
         }
 
         private static void DrawProjectGridCell(
