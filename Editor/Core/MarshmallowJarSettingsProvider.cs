@@ -41,6 +41,10 @@ namespace Poyo.MarshmallowJar.Editor
             new GUIContent("Inspector に「別ウィンドウで開く」ボタンを出す");
         private static readonly GUIContent InspectorDescription =
             new GUIContent("選んでいるオブジェクトを固定した Inspector を別ウィンドウで開きます。ほかを選んでも表示は切り替わりません。");
+        private static readonly GUIContent BlendShapeTitle = new GUIContent("ブレンドシェイプのスライダー");
+        private static readonly GUIContent BlendShapeDescription = new GUIContent(
+            "SkinnedMeshRenderer のブレンドシェイプを、下限と上限を決めたスライダーで動かすウィンドウです。範囲の外の値は入力できません。");
+        private static readonly GUIContent OpenBlendShapeContent = new GUIContent("ウィンドウを開く");
         private static readonly GUIContent ColorizerTitle = new GUIContent("Irodori Colorizer");
         private static readonly GUIContent ColorizerDescription =
             new GUIContent("Project / Hierarchy の行に色付きラベルを付けます。右クリックメニューの「Marshmallow Jar」から使えます。");
@@ -58,7 +62,7 @@ namespace Poyo.MarshmallowJar.Editor
                 keywords = new HashSet<string>(new[]
                 {
                     "marshmallow", "hierarchy", "editoronly", "variant", "prefab",
-                    "lighting", "scene", "vrchat", "thumbnail", "inspector"
+                    "lighting", "scene", "vrchat", "thumbnail", "inspector", "blendshape"
                 }),
             };
         }
@@ -67,6 +71,19 @@ namespace Poyo.MarshmallowJar.Editor
         private static void OpenSettings()
         {
             SettingsService.OpenProjectSettings(MarshmallowJarInfo.SettingsPath);
+        }
+
+        // NOTE: 色付けの項目と離して区切り線を入れる。GameObject 側は 49 以下で Hierarchy の右クリックにも表示される。
+        [MenuItem("Assets/" + MarshmallowJarInfo.DisplayName + "/Settings…", false, 1130)]
+        private static void OpenSettingsFromAssets()
+        {
+            OpenSettings();
+        }
+
+        [MenuItem("GameObject/" + MarshmallowJarInfo.DisplayName + "/Settings…", false, 42)]
+        private static void OpenSettingsFromGameObject()
+        {
+            OpenSettings();
         }
 
         private static void OnGUI(string searchContext)
@@ -103,6 +120,20 @@ namespace Poyo.MarshmallowJar.Editor
                 settings.SaveChanges();
                 UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
             }
+
+            EditorGUILayout.Space(6f);
+            EditorGUILayout.LabelField(BlendShapeTitle);
+            EditorGUI.indentLevel++;
+            EditorGUILayout.LabelField(BlendShapeDescription, _descriptionStyle);
+            BlendShapeSliderWindow.DrawRangeFields(settings);
+            EditorGUI.indentLevel--;
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Space(15f);
+            if (GUILayout.Button(OpenBlendShapeContent))
+            {
+                BlendShapeSliderWindow.Open(null);
+            }
+            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space(10f);
             EditorGUILayout.LabelField(ColorizerTitle, EditorStyles.boldLabel);
