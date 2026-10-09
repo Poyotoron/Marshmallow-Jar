@@ -13,6 +13,8 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         private static readonly Color ProBackground = new Color(0.219f, 0.219f, 0.219f);
         private static readonly Color PersonalBackground = new Color(0.760f, 0.760f, 0.760f);
         private static readonly Color DarkText = new Color(0.06f, 0.06f, 0.06f);
+        private static readonly Color ProFilterDim = new Color(0.219f, 0.219f, 0.219f, 0.7f);
+        private static readonly Color PersonalFilterDim = new Color(0.760f, 0.760f, 0.760f, 0.7f);
         // NOTE: 表示名を保持すると、行の再描画ごとに名前を生成したりパッケージ情報を調べたりせずに済む。
         private static readonly Dictionary<string, string> ProjectDisplayNames =
             new Dictionary<string, string>(StringComparer.Ordinal);
@@ -47,6 +49,7 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         public static void Invalidate()
         {
             ProjectDisplayNames.Clear();
+            IrodoriFilter.Invalidate();
             _projectMap = null;
             IrodoriLabelResolver.Invalidate();
             IrodoriHierarchy.Invalidate();
@@ -107,19 +110,30 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
                 return;
             }
 
-            if (ProjectMap.Count == 0 || !ProjectMap.TryGetValue(guid, out string labelId))
-            {
-                return;
-            }
-
-            if (!IrodoriLabelResolver.TryResolve(labelId, out IrodoriLabel label))
-            {
-                return;
-            }
-
             bool isGrid = selectionRect.height > 20f;
-            bool selected = Array.IndexOf(Selection.assetGUIDs, guid) >= 0;
-            DrawProjectRow(selectionRect, label.Color, isGrid, selected, guid);
+            if (ProjectMap.Count > 0 && ProjectMap.TryGetValue(guid, out string labelId) &&
+                IrodoriLabelResolver.TryResolve(labelId, out IrodoriLabel label))
+            {
+                bool selected = Array.IndexOf(Selection.assetGUIDs, guid) >= 0;
+                DrawProjectRow(selectionRect, label.Color, isGrid, selected, guid);
+            }
+
+            if (IrodoriFilter.IsActive && !IrodoriFilter.IsVisible(guid))
+            {
+                DrawFilterDim(selectionRect, isGrid);
+            }
+        }
+
+        private static void DrawFilterDim(Rect selectionRect, bool isGrid)
+        {
+            Rect rect = selectionRect;
+            if (!isGrid)
+            {
+                rect.xMin = 0f;
+            }
+
+            // NOTE: 背景色を半透明で重ねると、行の操作を保ったまま選んだ色以外を目立たなくできる。
+            EditorGUI.DrawRect(rect, EditorGUIUtility.isProSkin ? ProFilterDim : PersonalFilterDim);
         }
 
         internal static void CaptureContextClick(Rect selectionRect)

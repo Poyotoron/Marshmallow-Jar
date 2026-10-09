@@ -7,6 +7,31 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
     /// <summary>選択対象へのラベルの設定と解除を提供する。</summary>
     internal static class IrodoriMenu
     {
+        [MenuItem(IrodoriInfo.AssetMenuRoot + "Filter by Label…", false, 1110)]
+        private static void ShowFilterPopup()
+        {
+            IrodoriFilterPopup.Open();
+        }
+
+        [MenuItem(IrodoriInfo.AssetMenuRoot + "Filter by Label…", true)]
+        private static bool ValidateShowFilterPopup()
+        {
+            IrodoriSettings settings = IrodoriSettings.Instance;
+            return settings.enabled && settings.paintProject;
+        }
+
+        [MenuItem(IrodoriInfo.AssetMenuRoot + "Clear Label Filter", false, 1111)]
+        private static void ClearLabelFilter()
+        {
+            IrodoriFilter.Clear();
+        }
+
+        [MenuItem(IrodoriInfo.AssetMenuRoot + "Clear Label Filter", true)]
+        private static bool ValidateClearLabelFilter()
+        {
+            return IrodoriFilter.IsActive;
+        }
+
         [MenuItem(IrodoriInfo.AssetMenuRoot + "Set Label…", false, 1100)]
         private static void ShowProjectPopup()
         {
