@@ -113,3 +113,7 @@ InitTestScene*.unity*
 .claude/
 .codex
 .codex/
+
+# ドキュメントサイトのビルド成果物
+docs~/site/
+docs~/.cache/
