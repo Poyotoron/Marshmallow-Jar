@@ -11,6 +11,9 @@ namespace Poyo.MarshmallowJar.Editor
         private const float SoundWidth = 40f;
         private const float WebhookWidth = 60f;
         private const float ButtonWidth = 64f;
+        private const float TabWidth = 160f;
+        private const string OtherItemsMessage = "かんたん編集に出ない項目も、JSON にはそのまま残ります。";
+        private const string EmptyContentMessage = "メッセージ・タイトル・本文・フッターがすべて空だと、Discord は受け付けません。";
 #if MARSHMALLOW_JAR_HAS_VRCSDK_BASE
         private const bool HasVrcSdkBase = true;
 #else
@@ -36,7 +39,43 @@ namespace Poyo.MarshmallowJar.Editor
         private static readonly GUIContent OtherOs = new GUIContent("Windows 以外ではビープ音で知らせます。");
         private static readonly GUIContent UrlContent = new GUIContent("Webhook URL");
         private static readonly GUIContent TestSend = new GUIContent("テスト送信");
-        private static readonly GUIContent TemplateHeading = new GUIContent("本文のテンプレート（JSON）");
+        private static readonly GUIContent TemplateHeading = new GUIContent("Webhook で送る内容");
+        private static readonly GUIContent[] TabContents =
+        {
+            new GUIContent("かんたん編集", "欄ごとに入力します。Discord 用です。"),
+            new GUIContent("JSON", "送る JSON を直接書きます。かんたん編集で変えると、JSON は決まった形に整えられます。"),
+        };
+        private static readonly int[] SelectedTabs = { 0, 0 };
+        private static readonly string[] CachedTemplates = new string[2];
+        private static readonly WebhookSimpleSnapshot[] CachedSnapshots = new WebhookSimpleSnapshot[2];
+        private static readonly int[] InsertTargets = { 4, 4 };
+        private static readonly string[] FieldControlNames =
+        {
+            "MarshmallowJar.Webhook.Username", "MarshmallowJar.Webhook.AvatarUrl",
+            "MarshmallowJar.Webhook.Content", "MarshmallowJar.Webhook.Title",
+            "MarshmallowJar.Webhook.Description", "MarshmallowJar.Webhook.Footer",
+        };
+        private static readonly GUIContent[] FieldContents =
+        {
+            new GUIContent("送信者名", "Discord に表示する送信者の名前です。空なら Webhook 側で設定した名前になります。"),
+            new GUIContent("アイコンの URL", "送信者のアイコン画像の URL です。空なら Webhook 側で設定したアイコンになります。"),
+            new GUIContent("メッセージ", "埋め込みの上に出る、ふつうのメッセージです。空なら出しません。"),
+            new GUIContent("タイトル", "埋め込みのタイトルです。"),
+            new GUIContent("本文", "埋め込みの本文です。"),
+            new GUIContent("フッター", "埋め込みの下に小さく出る文字です。"),
+        };
+        private static readonly GUIContent InsertLabel = new GUIContent("差し込む");
+        private static readonly string[] Placeholders = { "{title}", "{message}", "{result}", "{project}", "{time}" };
+        private static readonly GUIContent[] PlaceholderContents =
+        {
+            new GUIContent("{title}", "通知のタイトルに置き換わります。例: アップロード完了"),
+            new GUIContent("{message}", "通知の本文に置き換わります。例: VRChat へのアップロードが完了しました（3 分 05 秒）"),
+            new GUIContent("{result}", "結果に置き換わります。「成功」または「失敗」"),
+            new GUIContent("{project}", "プロジェクトのフォルダ名に置き換わります。"),
+            new GUIContent("{time}", "知らせた時刻に置き換わります。例: 2026-10-15 21:30:00"),
+        };
+        private static readonly GUIContent InsertDescription = new GUIContent(
+            "差し込むボタンは、最後に入力していた欄の末尾に追加します。新しく作る埋め込みの色は、成功なら緑、失敗なら赤になります。");
         private static readonly GUIContent ResetTemplate = new GUIContent("Discord 用に戻す");
         private static readonly GUIContent TemplateDescription = new GUIContent("{title} タイトル / {message} 本文 / {result} 成功・失敗 / {project} プロジェクト名 / {time} 時刻 / {color} 色（数値。Discord の埋め込み用）");
         private static readonly GUIContent OpenGlobal = new GUIContent("全体設定を開く");
@@ -143,19 +182,116 @@ namespace Poyo.MarshmallowJar.Editor
             EditorGUI.EndDisabledGroup();
 
             state = GetValueRects(MarshmallowJarNotificationValue.WebhookTemplate, out fieldRect, out stateRect);
+            Rect tabRect = fieldRect;
+            tabRect.xMin = tabRect.xMax - TabWidth;
+            fieldRect.xMax = tabRect.xMin - 4f;
             GUI.Label(fieldRect, TemplateHeading);
-            DrawValueState(MarshmallowJarNotificationValue.WebhookTemplate, project, stateRect, state);
-            EditorGUI.BeginChangeCheck();
-            string template = EditorGUILayout.TextArea(
-                project ? MarshmallowJarNotificationSettings.WebhookTemplate : global.webhookTemplate, TemplateOptions);
-            if (EditorGUI.EndChangeCheck())
+            int page = project ? 1 : 0;
+            int tab = GUI.Toolbar(tabRect, SelectedTabs[page], TabContents, EditorStyles.miniButton);
+            if (tab != SelectedTabs[page])
             {
-                SetWebhookTemplate(project, template);
+                SelectedTabs[page] = tab;
+                GUIUtility.keyboardControl = 0;
             }
-            EditorGUILayout.LabelField(TemplateDescription, MarshmallowJarToggleGUI.DescriptionStyle);
+            DrawValueState(MarshmallowJarNotificationValue.WebhookTemplate, project, stateRect, state);
+            string template = project ? MarshmallowJarNotificationSettings.WebhookTemplate : global.webhookTemplate;
+            WebhookSimpleSnapshot snapshot = GetSnapshot(page, template);
+            if (SelectedTabs[page] == 0)
+            {
+                DrawSimpleFields(project, page, template, snapshot);
+            }
+            else
+            {
+                EditorGUI.BeginChangeCheck();
+                string value = EditorGUILayout.TextArea(template, TemplateOptions);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    SetWebhookTemplate(project, value);
+                }
+                EditorGUILayout.LabelField(TemplateDescription, MarshmallowJarToggleGUI.DescriptionStyle);
+            }
             if (GUILayout.Button(ResetTemplate))
             {
+                GUIUtility.keyboardControl = 0;
                 SetWebhookTemplate(project, MarshmallowJarGlobalSettings.DiscordWebhookTemplate);
+            }
+        }
+
+        private static WebhookSimpleSnapshot GetSnapshot(int page, string template)
+        {
+            // NOTE: 解析は文字列と木を作るので、JSON 編集やほかのプロジェクトでの変更も文字列の比較で検出し、変わったときだけ行う。
+            if (CachedSnapshots[page] == null || !string.Equals(CachedTemplates[page], template, StringComparison.Ordinal))
+            {
+                CachedTemplates[page] = template;
+                CachedSnapshots[page] = WebhookSimpleFields.Read(template);
+            }
+            return CachedSnapshots[page];
+        }
+
+        private static void DrawSimpleFields(bool project, int page, string template, WebhookSimpleSnapshot snapshot)
+        {
+            if (snapshot.ErrorMessage != null)
+            {
+                EditorGUILayout.HelpBox(snapshot.ErrorMessage, MessageType.Warning);
+            }
+            EditorGUI.indentLevel++;
+            for (int i = 0; i < WebhookSimpleFields.Count; i++)
+            {
+                EditorGUI.BeginDisabledGroup(!snapshot.Editable[i]);
+                EditorGUI.BeginChangeCheck();
+                GUI.SetNextControlName(FieldControlNames[i]);
+                string value = EditorGUILayout.TextField(FieldContents[i], snapshot.Values[i]);
+                if (EditorGUI.EndChangeCheck() && WebhookSimpleFields.TryApply(template, i, value, out string result))
+                {
+                    SetWebhookTemplate(project, result);
+                    template = result;
+                    snapshot = GetSnapshot(page, result);
+                }
+                EditorGUI.EndDisabledGroup();
+            }
+            EditorGUI.indentLevel--;
+            string focused = GUI.GetNameOfFocusedControl();
+            for (int i = 0; i < FieldControlNames.Length; i++)
+            {
+                if (string.Equals(focused, FieldControlNames[i], StringComparison.Ordinal))
+                {
+                    InsertTargets[page] = i;
+                    break;
+                }
+            }
+            EditorGUI.BeginDisabledGroup(snapshot.ErrorMessage != null);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.PrefixLabel(InsertLabel);
+            for (int i = 0; i < Placeholders.Length; i++)
+            {
+                if (GUILayout.Button(PlaceholderContents[i], EditorStyles.miniButton))
+                {
+                    // NOTE: 入力欄はフォーカス中に文字列の写しを表示するため、外さないと追加が見えず、次の入力で消える。
+                    GUIUtility.keyboardControl = 0;
+                    int target = InsertTargets[page];
+                    // NOTE: カーソル位置は公開 API で取れないため、最後に入力していた欄の末尾に足す。
+                    if (WebhookSimpleFields.TryApply(template, target, snapshot.Values[target] + Placeholders[i], out string result))
+                    {
+                        SetWebhookTemplate(project, result);
+                        template = result;
+                        snapshot = GetSnapshot(page, result);
+                    }
+                }
+            }
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            EditorGUI.EndDisabledGroup();
+            EditorGUILayout.LabelField(InsertDescription, MarshmallowJarToggleGUI.DescriptionStyle);
+            if (snapshot.ErrorMessage == null)
+            {
+                if (snapshot.HasOtherItems)
+                {
+                    EditorGUILayout.HelpBox(OtherItemsMessage, MessageType.Info);
+                }
+                if (!snapshot.HasVisibleContent)
+                {
+                    EditorGUILayout.HelpBox(EmptyContentMessage, MessageType.Warning);
+                }
             }
         }
 
