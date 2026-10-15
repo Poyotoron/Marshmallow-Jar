@@ -50,6 +50,7 @@ Project Settings でチェックボックスを切り替えると、その項目
 | シーンのライティングとカメラを整える | 新しいシーンを推奨のライティングで作り、既存のシーンは確認してから変換する。Project Settings に **今のシーンに適用**・**確認しないシーンをリセット** のボタンがある | [シーンのライティング](scene-lighting.md) |
 | VRChat SDK に名前とサムネイルを自動入力する | 初めてアップロードするアバターの名前とサムネイルを入れる | [VRChat SDK への自動入力](sdk-autofill.md) |
 | Inspector に「別ウィンドウで開く」ボタンを出す | Inspector のヘッダーにボタンを出す | [Inspector を別ウィンドウで開く](inspector.md) |
+| Inspector に「コピーを保存…」ボタンを出す | アセットの Inspector に、保存先を選んでコピーするボタンを出す | [コピーを保存](copy-asset.md) |
 | Irodori Colorizer を使う | Project / Hierarchy の行に色付きのラベルを付ける | [Irodori Colorizer](colorizer.md) |
 
 !!! note "VRChat SDK が入っていないと、自動入力の項目は選べません"

@@ -5,7 +5,7 @@ namespace Poyo.MarshmallowJar.Editor
     {
         public const string PackageId = "net.maaaaa.marshmallow-jar";
         public const string DisplayName = "Marshmallow Jar";
-        public const string Version = "0.2.0";
+        public const string Version = "0.2.1";
         public const string GlobalSettingsKey = PackageId + ".GlobalSettings";
         public const string PreferencesPath = "Preferences/" + DisplayName;
         public const string PreferencesMenuPath = "Tools/" + DisplayName + "/Preferences…";

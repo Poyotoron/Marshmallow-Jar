@@ -106,6 +106,7 @@ namespace Poyo.MarshmallowJar.Editor
             DrawProjectFeature(MarshmallowJarToggle.VrcSdkAutoFill, SdkTitle,
                 HasVrcSdk ? SdkDescription : SdkUnavailableDescription, HasVrcSdk);
             DrawProjectFeature(MarshmallowJarToggle.InspectorNewWindowButton, InspectorTitle, InspectorDescription, true);
+            DrawProjectFeature(MarshmallowJarToggle.InspectorCopyToButton, CopyToTitle, CopyToDescription, true);
 
             EditorGUILayout.Space(6f);
             EditorGUILayout.LabelField(BlendShapeTitle);

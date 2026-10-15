@@ -115,7 +115,7 @@ namespace Poyo.MarshmallowJar.Editor
             return builder.ToString();
         }
 
-        private static void AppendJsonEscaped(StringBuilder builder, string value)
+        internal static void AppendJsonEscaped(StringBuilder builder, string value)
         {
             foreach (char c in value)
             {

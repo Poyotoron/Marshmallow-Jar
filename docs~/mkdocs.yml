@@ -60,6 +60,7 @@ nav:
       - シーンのライティング: scene-lighting.md
       - VRChat SDK への自動入力: sdk-autofill.md
       - Inspector を別ウィンドウで開く: inspector.md
+      - コピーを保存: copy-asset.md
       - ブレンドシェイプのスライダー: blendshape-sliders.md
       - 完了通知: notifications.md
   - Irodori Colorizer:

@@ -43,6 +43,7 @@ namespace Poyo.MarshmallowJar.Editor
                 case MarshmallowJarToggle.SceneSetup:
                 case MarshmallowJarToggle.VrcSdkAutoFill:
                 case MarshmallowJarToggle.InspectorNewWindowButton:
+                case MarshmallowJarToggle.InspectorCopyToButton:
                 case MarshmallowJarToggle.IrodoriColorizer:
                 case MarshmallowJarToggle.CompletionNotifications:
                 case MarshmallowJarToggle.NotifyPlayModeWebhook:
