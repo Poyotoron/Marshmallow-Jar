@@ -1,7 +1,7 @@
 {
   "name": "net.maaaaa.marshmallow-jar",
   "displayName": "Marshmallow Jar",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Unity エディタの使い勝手を整える小さな機能をまとめたパッケージです。機能ごとに ON / OFF できます。",
   "unity": "2022.3",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "name": "Poyotoron",
     "url": "https://github.com/Poyotoron"
   },
-  "url": "https://github.com/Poyotoron/Marshmallow-Jar/releases/download/0.2.0/net.maaaaa.marshmallow-jar-0.2.0.zip",
+  "url": "https://github.com/Poyotoron/Marshmallow-Jar/releases/download/0.2.1/net.maaaaa.marshmallow-jar-0.2.1.zip",
   "documentationUrl": "https://ghp.maaaaa.net/Marshmallow-Jar/",
   "changelogUrl": "https://github.com/Poyotoron/Marshmallow-Jar/blob/main/CHANGELOG.md"
 }
