@@ -40,5 +40,5 @@ Project ウィンドウで、**選んだ色のラベルが付いたものだけ�
 
 ## 使えないとき
 
-`Filter by Label…` が灰色で選べない場合は、[Irodori Colorizer の設定](colorizer-settings.md)の
-「有効」と「Project ウィンドウ」がオンになっているか確認してください。
+`Filter by Label…` が灰色で選べない場合は、[設定画面](settings.md)の **Irodori Colorizer を使う** と、
+[Irodori Colorizer の設定](colorizer-settings.md)の「Project ウィンドウ」がオンになっているか確認してください。

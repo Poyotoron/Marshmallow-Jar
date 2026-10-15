@@ -16,7 +16,7 @@ namespace Poyo.MarshmallowJar.Editor
         [MenuItem(Root + "Convert Active Scene", true)]
         private static bool ValidateConvertActiveScene()
         {
-            return MarshmallowJarSettings.instance.sceneSetup &&
+            return MarshmallowJarToggles.IsOn(MarshmallowJarToggle.SceneSetup) &&
                 !EditorApplication.isPlayingOrWillChangePlaymode && SceneManager.GetActiveScene().IsValid();
         }
 

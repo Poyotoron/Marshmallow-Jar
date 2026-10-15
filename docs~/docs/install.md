@@ -28,14 +28,16 @@ VCC を使っていない場合は、[リリースページ](https://github.com/
 Unity のメニューに次の項目が増えていればインストール成功です。
 
 ```
-Tools > Marshmallow Jar > Settings…
+Tools > Marshmallow Jar > Preferences…
+Tools > Marshmallow Jar > Project Settings…
 ```
 
-クリックすると、Project Settings の `Marshmallow Jar` ページが開きます。
+`Preferences…` で全プロジェクト共通の設定（全体設定）が、`Project Settings…` でこのプロジェクトの設定が開きます。
 
-!!! info "導入した時点で、ほとんどの機能がオンになっています"
-    Hierarchy のチェックボックスなどは、導入してすぐに表示されます。
-    不要なものは[設定画面](settings.md)でオフにしてください。
+!!! info "導入した時点では、すべての機能がオフです"
+    他の拡張と動きがぶつからないよう、最初はどの機能も動きません。
+    `Preferences…` を開き、使いたい機能をオンにしてください。一度オンにすると、この PC の他のプロジェクトでもオンになります。
+    詳しくは[設定画面](settings.md)を参照してください。
 
 ## 単体版の Irodori Colorizer を使っている場合
 
@@ -45,7 +47,16 @@ VCC / ALCOM で単体版を削除してください。付けた色と設定は�
 
 手順と注意点は[単体版からの移行](colorizer-migration.md)を参照してください。
 
-## 更新する
+## 更新する {#update}
 
 VCC / ALCOM から更新するか、新しい `.unitypackage` をインポートしてください。
-設定は `ProjectSettings/` に保存されているため、更新しても保たれます。
+設定は `ProjectSettings/` などに保存されているため、更新しても保たれます。
+
+!!! warning "0.1.0 から 0.2.0 に更新すると、機能のオン・オフは全体設定に従います"
+    0.2.0 から、オン・オフは全プロジェクト共通の全体設定で決めるようになりました。
+    0.1.0 でプロジェクトごとに保存していたオン・オフは引き継がれません。
+
+    - **この PC で初めて 0.2.0 に更新したとき**は、全体設定がすべてオフで作られます。`Tools > Marshmallow Jar > Preferences…` で、使う機能をオンにしてください。
+    - **2 つ目以降のプロジェクト**は、その全体設定に従います。もう一度オンにし直す必要はありません。
+
+    Hierarchy の位置、確認しないシーン、スライダーの範囲、Irodori Colorizer のラベルはそのまま残ります。

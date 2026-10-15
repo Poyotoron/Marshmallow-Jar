@@ -9,7 +9,10 @@ VRChat のアバター改変で、Unity エディタそのものを少し使い�
 
 - Unity 2022.3
 - エディタ専用
-- 必須の依存パッケージはありません。「VRChat SDK への自動入力」だけは VRChat SDK - Avatars 3.10.0 以降（4.0.0 未満）が必要です。
+- 必須の依存パッケージはありません。次の機能だけ、対応するパッケージが必要です。
+  - 「VRChat SDK への自動入力」: VRChat SDK - Avatars 3.10.0 以降（4.0.0 未満）
+  - 完了通知の「VRChat へのアップロード」: VRChat SDK 3.10.0 以降（4.0.0 未満）
+  - 完了通知の「連続アップロード」: Continuous Avatar Uploader 0.3.8 以降（0.4.0 未満）
 
 ## 導入
 
@@ -18,8 +21,14 @@ VCC を使っていない場合は、[リリースページ](https://github.com/
 
 ## 設定
 
-`Tools > Marshmallow Jar > Settings…`（または Project / Hierarchy の右クリック `Marshmallow Jar > Settings…`）で、
-Project Settings の `Marshmallow Jar` ページが開きます。各機能はここでオン・オフできます。
+導入した時点では、**すべての機能がオフ**です。他の拡張と動きがぶつからないよう、使う機能だけをオンにしてください。
+
+| メニュー（Project / Hierarchy の右クリック `Marshmallow Jar` にもあります） | 開くページ |
+|---|---|
+| `Tools > Marshmallow Jar > Preferences…` | 全体設定。全プロジェクト共通のオン・オフと完了通知の設定 |
+| `Tools > Marshmallow Jar > Project Settings…` | このプロジェクトの設定。全体設定の上書きと、プロジェクトごとの値 |
+
+Project Settings で切り替えた項目は、このプロジェクトだけの上書きになります。上書きした項目は両方のページで色付きで表示されます。
 
 ## 収録機能
 
@@ -31,6 +40,7 @@ Project Settings の `Marshmallow Jar` ページが開きます。各機能は�
 | VRChat SDK への自動入力 | 初めてアップロードするアバターの名前とサムネイルが空なら、アバターの名前と Scene ビューの画像を入れます。 |
 | Inspector を別ウィンドウで開く | 選んでいるオブジェクトを固定した Inspector を、別ウィンドウでいくつでも開けます。 |
 | ブレンドシェイプのスライダー | 下限と上限を自由に決めたスライダーで、ブレンドシェイプを動かせるウィンドウです。 |
+| 完了通知 | VRChat へのアップロード、Continuous Avatar Uploader の連続アップロード、もちふぃった～ の衣装変換、Play モード、インポート・コンパイルが終わったら、音と Webhook（Discord など）で知らせます。 |
 | Irodori Colorizer | Project / Hierarchy の行に色付きのラベルを付けます。Project ウィンドウを色で絞り込めます。 |
 
 自動で出る確認は、エディタを止めない小さなウィンドウで表示します。同じ操作はメニューからも選べます。

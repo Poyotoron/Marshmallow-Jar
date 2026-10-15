@@ -17,7 +17,7 @@ namespace Poyo.MarshmallowJar.Editor
 
         private static void OnHeaderGUI(UnityEditor.Editor editor)
         {
-            if (!MarshmallowJarSettings.instance.inspectorNewWindowButton)
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.InspectorNewWindowButton))
             {
                 return;
             }
