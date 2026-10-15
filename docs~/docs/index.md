@@ -14,6 +14,7 @@
 | [シーンのライティング](scene-lighting.md) | アバターの色味を確かめやすいライティングでシーンを作る。既存のシーンは確認してから変換する |
 | [VRChat SDK への自動入力](sdk-autofill.md) | 初めてアップロードするアバターの名前とサムネイルを自動で入れる（VRChat SDK が必要） |
 | [Inspector を別ウィンドウで開く](inspector.md) | 選んでいるオブジェクトを固定した Inspector を、いくつでも並べて開ける |
+| [コピーを保存](copy-asset.md) | 保存先と名前を選んで、マテリアルなどのアセットをコピーできる |
 | [ブレンドシェイプのスライダー](blendshape-sliders.md) | 下限と上限を自由に決めたスライダーでブレンドシェイプを動かせる（開いたときだけ働く） |
 | [完了通知](notifications.md) | アップロードやインポートなど、時間のかかる処理が終わったら音と Webhook で知らせる |
 | [Irodori Colorizer](colorizer.md) | Project / Hierarchy の行に色付きのラベルを付ける。色で絞り込める |
@@ -46,6 +47,7 @@
 | Unity で合わせた色味が、ワールドで見ると黄色っぽい | [シーンのライティング](scene-lighting.md) |
 | 初回アップロードのたびに名前とサムネイルを入れている | [VRChat SDK への自動入力](sdk-autofill.md) |
 | 2 つのオブジェクトの Inspector を見比べたい | [Inspector を別ウィンドウで開く](inspector.md) |
+| マテリアルを別のフォルダや `Assets/` に複製したい | [コピーを保存](copy-asset.md) |
 | ブレンドシェイプを 100 より大きく、または細かく動かしたい | [ブレンドシェイプのスライダー](blendshape-sliders.md) |
 | アップロードが終わったら Discord で知りたい | [完了通知](notifications.md) |
 | フォルダや GameObject を色で見分けたい | [Irodori Colorizer](colorizer.md) |
