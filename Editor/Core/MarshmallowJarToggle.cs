@@ -20,5 +20,6 @@ namespace Poyo.MarshmallowJar.Editor
         NotifyPlayModeWebhook = 14,
         NotifyImportSound = 15,
         NotifyImportWebhook = 16,
+        InspectorCopyToButton = 17,
     }
 }

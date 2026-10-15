@@ -73,6 +73,7 @@ namespace Poyo.MarshmallowJar.Editor
             DrawGlobalFeature(MarshmallowJarToggle.VrcSdkAutoFill, SdkTitle,
                 HasVrcSdk ? SdkDescription : SdkUnavailableDescription, HasVrcSdk);
             DrawGlobalFeature(MarshmallowJarToggle.InspectorNewWindowButton, InspectorTitle, InspectorDescription, true);
+            DrawGlobalFeature(MarshmallowJarToggle.InspectorCopyToButton, CopyToTitle, CopyToDescription, true);
             DrawGlobalFeature(MarshmallowJarToggle.IrodoriColorizer, ColorizerToggleTitle, ColorizerDescription,
                 !StandaloneColorizerNotice.IsStandaloneInstalled);
             NotificationSettingsGUI.DrawGlobal();

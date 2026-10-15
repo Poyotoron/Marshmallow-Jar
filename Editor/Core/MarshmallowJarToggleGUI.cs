@@ -41,6 +41,9 @@ namespace Poyo.MarshmallowJar.Editor
             new GUIContent("選んでいるオブジェクトを固定した Inspector を別ウィンドウで開きます。ほかを選んでも表示は切り替わりません。");
         internal static readonly GUIContent ColorizerDescription =
             new GUIContent("Project / Hierarchy の行に色付きラベルを付けます。右クリックメニューの「Marshmallow Jar」から使えます。");
+        internal static readonly GUIContent CopyToTitle = new GUIContent("Inspector に「コピーを保存…」ボタンを出す");
+        internal static readonly GUIContent CopyToDescription = new GUIContent(
+            "アセットの Inspector に、保存先と名前を選んでコピーを作るボタンを出します。マテリアルなどを別のフォルダに複製するときに使います。");
         internal static readonly GUIContent ColorizerToggleTitle = new GUIContent("Irodori Colorizer を使う");
         internal static readonly GUIContent FollowGlobalContent = new GUIContent("全体設定のまま");
         internal static readonly GUIContent RevertToOnContent = new GUIContent("全体設定（ON）に戻す");
