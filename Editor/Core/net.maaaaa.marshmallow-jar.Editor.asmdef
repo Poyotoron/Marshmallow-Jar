@@ -21,6 +21,16 @@
             "name": "net.maaaaa.irodori-colorizer",
             "expression": "0.0.0",
             "define": "MARSHMALLOW_JAR_HAS_STANDALONE_COLORIZER"
+        },
+        {
+            "name": "com.vrchat.base",
+            "expression": "[3.10.0,4.0.0)",
+            "define": "MARSHMALLOW_JAR_HAS_VRCSDK_BASE"
+        },
+        {
+            "name": "com.anatawa12.continuous-avatar-uploader",
+            "expression": "[0.3.8,0.4.0)",
+            "define": "MARSHMALLOW_JAR_HAS_CAU"
         }
     ],
     "noEngineReferences": false

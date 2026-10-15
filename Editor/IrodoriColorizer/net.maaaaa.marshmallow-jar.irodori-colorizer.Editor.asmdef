@@ -1,7 +1,7 @@
 {
     "name": "net.maaaaa.marshmallow-jar.irodori-colorizer.Editor",
     "rootNamespace": "Poyo.MarshmallowJar.IrodoriColorizer.Editor",
-    "references": [],
+    "references": ["net.maaaaa.marshmallow-jar.Editor"],
     "includePlatforms": [
         "Editor"
     ],

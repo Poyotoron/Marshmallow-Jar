@@ -1,3 +1,4 @@
+using Poyo.MarshmallowJar.Editor;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -13,6 +14,8 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         private const float SmallButtonWidth = 20f;
         private const float ElementGap = 2f;
 
+        private static readonly string DisabledMessage = "Irodori Colorizer は OFF です。Marshmallow Jar のページで ON にできます。";
+        private static readonly GUIContent OpenSettingsContent = new GUIContent("Marshmallow Jar の設定を開く");
         private static readonly GUIContent PresetsHeading = new GUIContent("プリセット");
         private static readonly GUIContent LabelListHeading = new GUIContent("ラベル一覧");
         private static readonly GUIContent CustomHeading = new GUIContent("カスタム");
@@ -70,27 +73,32 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
             IrodoriSettings settings = IrodoriSettings.Instance;
             bool changed = false;
 
+            bool enabled = MarshmallowJarToggles.IsOn(MarshmallowJarToggle.IrodoriColorizer);
+            if (!enabled)
+            {
+                EditorGUILayout.HelpBox(DisabledMessage, MessageType.Info);
+                if (GUILayout.Button(OpenSettingsContent))
+                {
+                    SettingsService.OpenProjectSettings(MarshmallowJarInfo.SettingsPath);
+                }
+            }
+            EditorGUI.BeginDisabledGroup(!enabled);
             EditorGUI.BeginChangeCheck();
             EditorGUILayout.LabelField("表示", EditorStyles.boldLabel);
-            settings.enabled = EditorGUILayout.Toggle("有効", settings.enabled);
-            using (new EditorGUI.DisabledScope(!settings.enabled))
-            {
-                settings.paintProject = EditorGUILayout.Toggle("Project ウィンドウ", settings.paintProject);
-                settings.paintHierarchy = EditorGUILayout.Toggle("Hierarchy ウィンドウ", settings.paintHierarchy);
-                settings.paintFullRow = EditorGUILayout.Toggle("行全体を塗る", settings.paintFullRow);
-                settings.fillAlpha = EditorGUILayout.Slider("塗りの濃さ", settings.fillAlpha, 0.05f, 1f);
-                settings.keepSelectionVisible = EditorGUILayout.Toggle("選択行は塗らない", settings.keepSelectionVisible);
+            settings.paintProject = EditorGUILayout.Toggle("Project ウィンドウ", settings.paintProject);
+            settings.paintHierarchy = EditorGUILayout.Toggle("Hierarchy ウィンドウ", settings.paintHierarchy);
+            settings.paintFullRow = EditorGUILayout.Toggle("行全体を塗る", settings.paintFullRow);
+            settings.fillAlpha = EditorGUILayout.Slider("塗りの濃さ", settings.fillAlpha, 0.05f, 1f);
+            settings.keepSelectionVisible = EditorGUILayout.Toggle("選択行は塗らない", settings.keepSelectionVisible);
 
-                EditorGUILayout.Space();
-                EditorGUILayout.LabelField("ラベル表示", EditorStyles.boldLabel);
-                settings.autoTextColor = EditorGUILayout.Toggle("文字色を自動判定", settings.autoTextColor);
-                using (new EditorGUI.DisabledScope(settings.autoTextColor))
-                {
-                    settings.forcedTextColor = EditorGUILayout.ColorField("文字色（固定）", settings.forcedTextColor);
-                }
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("ラベル表示", EditorStyles.boldLabel);
+            settings.autoTextColor = EditorGUILayout.Toggle("文字色を自動判定", settings.autoTextColor);
+            EditorGUI.BeginDisabledGroup(settings.autoTextColor);
+            settings.forcedTextColor = EditorGUILayout.ColorField("文字色（固定）", settings.forcedTextColor);
+            EditorGUI.EndDisabledGroup();
 
-                settings.labelIndent = EditorGUILayout.Slider("ラベル位置", settings.labelIndent, 12f, 26f);
-            }
+            settings.labelIndent = EditorGUILayout.Slider("ラベル位置", settings.labelIndent, 12f, 26f);
 
             EditorGUILayout.Space();
             DrawPresets(settings, ref changed);
@@ -127,6 +135,7 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
             {
                 SaveAndRefresh(settings);
             }
+            EditorGUI.EndDisabledGroup();
         }
 
         private static void DrawPresets(IrodoriSettings settings, ref bool changed)

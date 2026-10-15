@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
 namespace Poyo.MarshmallowJar.Editor
 {
@@ -7,12 +8,8 @@ namespace Poyo.MarshmallowJar.Editor
     [FilePath("ProjectSettings/MarshmallowJar.asset", FilePathAttribute.Location.ProjectFolder)]
     public sealed class MarshmallowJarSettings : ScriptableSingleton<MarshmallowJarSettings>
     {
-        public int schemaVersion = 1;
-        public bool hierarchyToggles = true;
-        public bool stripVariantSuffix = true;
-        public bool sceneSetup = true;
-        public bool vrcSdkAutoFill = true;
-        public bool inspectorNewWindowButton = true;
+        public int schemaVersion = 2;
+        public List<MarshmallowJarToggleValue> toggleOverrides = new List<MarshmallowJarToggleValue>();
         public List<string> sceneSetupIgnoredSceneGuids = new List<string>();
         public float hierarchyToggleRightOffset = DefaultHierarchyToggleRightOffset;
         public float blendShapeSliderMin = DefaultBlendShapeSliderMin;
@@ -26,6 +23,35 @@ namespace Poyo.MarshmallowJar.Editor
         public const float DefaultBlendShapeSliderMax = 100f;
         // NOTE: 下限と上限が近すぎるとスライダーが操作できないため、最低でもこの幅を保つ。
         public const float MinBlendShapeSliderSpan = 1f;
+
+        [InitializeOnLoadMethod]
+        private static void MigrateSchema()
+        {
+            MarshmallowJarSettings settings = instance;
+            if (settings.schemaVersion >= 2)
+            {
+                return;
+            }
+            // NOTE: 旧版のプロジェクトごとの ON / OFF は全体設定に従わせるため読まずに捨て、距離などは残す。
+            settings.schemaVersion = 2;
+            settings.GetToggleOverrides().Clear();
+            settings.SaveChanges();
+            MarshmallowJarGlobalSettings unused = MarshmallowJarGlobalSettings.Instance;
+            Debug.Log(MarshmallowJarInfo.LogPrefix +
+                (SessionState.GetBool(MarshmallowJarGlobalSettings.CreatedSessionKey, false)
+                    ? "0.2.0 から、各機能の ON / OFF は全プロジェクト共通の設定（Preferences > Marshmallow Jar）で決めます。最初はすべて OFF です。使う機能を ON にしてください。"
+                    : "0.2.0 から、各機能の ON / OFF は全プロジェクト共通の設定（Preferences > Marshmallow Jar）に従います。このプロジェクトだけ変えたいときは Project Settings > Marshmallow Jar で上書きしてください。"));
+            MarshmallowJarToggles.Invalidate();
+        }
+
+        internal List<MarshmallowJarToggleValue> GetToggleOverrides()
+        {
+            if (toggleOverrides == null)
+            {
+                toggleOverrides = new List<MarshmallowJarToggleValue>();
+            }
+            return toggleOverrides;
+        }
 
         internal void SetBlendShapeSliderRange(float min, float max, bool minEdited)
         {

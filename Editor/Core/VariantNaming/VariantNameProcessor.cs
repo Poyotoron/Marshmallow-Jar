@@ -18,7 +18,7 @@ namespace Poyo.MarshmallowJar.Editor
 
         internal static void NotifyCreating(string path)
         {
-            if (!MarshmallowJarSettings.instance.stripVariantSuffix)
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.StripVariantSuffix))
             {
                 return;
             }
@@ -76,7 +76,7 @@ namespace Poyo.MarshmallowJar.Editor
 
         private static void TryStripSuffix(string path)
         {
-            if (!MarshmallowJarSettings.instance.stripVariantSuffix)
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.StripVariantSuffix))
             {
                 return;
             }

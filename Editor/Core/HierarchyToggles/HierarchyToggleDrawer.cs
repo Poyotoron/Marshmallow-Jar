@@ -31,12 +31,12 @@ namespace Poyo.MarshmallowJar.Editor
 
         private static void OnHierarchyItem(int instanceID, Rect selectionRect)
         {
-            MarshmallowJarSettings settings = MarshmallowJarSettings.instance;
-            if (!settings.hierarchyToggles)
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.HierarchyToggles))
             {
                 return;
             }
 
+            MarshmallowJarSettings settings = MarshmallowJarSettings.instance;
             float rightOffset = Mathf.Clamp(settings.hierarchyToggleRightOffset, 0f,
                 MarshmallowJarSettings.MaxHierarchyToggleRightOffset);
             GameObject go = EditorUtility.InstanceIDToObject(instanceID) as GameObject;

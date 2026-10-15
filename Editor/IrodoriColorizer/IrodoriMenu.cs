@@ -1,3 +1,4 @@
+using Poyo.MarshmallowJar.Editor;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -17,7 +18,7 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         private static bool ValidateShowFilterPopup()
         {
             IrodoriSettings settings = IrodoriSettings.Instance;
-            return settings.enabled && settings.paintProject;
+            return MarshmallowJarToggles.IsOn(MarshmallowJarToggle.IrodoriColorizer) && settings.paintProject;
         }
 
         [MenuItem(IrodoriInfo.AssetMenuRoot + "Clear Label Filter", false, 1111)]
@@ -29,7 +30,7 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         [MenuItem(IrodoriInfo.AssetMenuRoot + "Clear Label Filter", true)]
         private static bool ValidateClearLabelFilter()
         {
-            return IrodoriFilter.IsActive;
+            return MarshmallowJarToggles.IsOn(MarshmallowJarToggle.IrodoriColorizer) && IrodoriFilter.IsActive;
         }
 
         [MenuItem(IrodoriInfo.AssetMenuRoot + "Set Label…", false, 1100)]
@@ -45,7 +46,7 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         [MenuItem(IrodoriInfo.AssetMenuRoot + "Set Label…", true)]
         private static bool ValidateShowProjectPopup()
         {
-            return Selection.assetGUIDs.Length > 0;
+            return MarshmallowJarToggles.IsOn(MarshmallowJarToggle.IrodoriColorizer) && Selection.assetGUIDs.Length > 0;
         }
 
         [MenuItem(IrodoriInfo.AssetMenuRoot + "Clear Label", false, 1101)]
@@ -57,7 +58,7 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         [MenuItem(IrodoriInfo.AssetMenuRoot + "Clear Label", true)]
         private static bool ValidateClearProjectColor()
         {
-            return Selection.assetGUIDs.Length > 0;
+            return MarshmallowJarToggles.IsOn(MarshmallowJarToggle.IrodoriColorizer) && Selection.assetGUIDs.Length > 0;
         }
 
         [MenuItem(IrodoriInfo.GameObjectMenuRoot + "Set Label…", false, 30)]
@@ -84,6 +85,18 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
             }
 
             ClearHierarchy(Selection.gameObjects);
+        }
+
+        [MenuItem(IrodoriInfo.GameObjectMenuRoot + "Set Label…", true)]
+        private static bool ValidateShowHierarchyPopup()
+        {
+            return MarshmallowJarToggles.IsOn(MarshmallowJarToggle.IrodoriColorizer);
+        }
+
+        [MenuItem(IrodoriInfo.GameObjectMenuRoot + "Clear Label", true)]
+        private static bool ValidateClearHierarchyColor()
+        {
+            return MarshmallowJarToggles.IsOn(MarshmallowJarToggle.IrodoriColorizer);
         }
 
         private static bool IsDuplicateInvocation(MenuCommand command)

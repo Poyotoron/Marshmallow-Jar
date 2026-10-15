@@ -1,3 +1,4 @@
+using Poyo.MarshmallowJar.Editor;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -103,9 +104,14 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         {
             CaptureContextClick(selectionRect);
 
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.IrodoriColorizer))
+            {
+                return;
+            }
+
             IrodoriSettings settings = IrodoriSettings.Instance;
             // NOTE: このコールバックは表示行ごとに繰り返されるため、無効時は参照処理にも入らない。
-            if (!settings.enabled || !settings.paintProject)
+            if (!settings.paintProject)
             {
                 return;
             }

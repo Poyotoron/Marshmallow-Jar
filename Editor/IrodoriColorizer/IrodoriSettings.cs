@@ -51,7 +51,6 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
 
         public int schemaVersion = 2;
 
-        public bool enabled = true;
         public bool paintProject = true;
         public bool paintHierarchy = true;
         public float fillAlpha = 0.32f;

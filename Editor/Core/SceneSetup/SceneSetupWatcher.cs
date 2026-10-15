@@ -37,7 +37,7 @@ namespace Poyo.MarshmallowJar.Editor
 
         private static void OnNewSceneCreated(Scene scene, NewSceneSetup setup, NewSceneMode mode)
         {
-            if (!MarshmallowJarSettings.instance.sceneSetup || mode != NewSceneMode.Single ||
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.SceneSetup) || mode != NewSceneMode.Single ||
                 EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 return;
@@ -71,12 +71,12 @@ namespace Poyo.MarshmallowJar.Editor
                 ClearPending();
             }
 
-            if (!MarshmallowJarSettings.instance.sceneSetup)
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.SceneSetup))
             {
                 ClearPending();
             }
 
-            if (!MarshmallowJarSettings.instance.sceneSetup || Application.isBatchMode ||
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.SceneSetup) || Application.isBatchMode ||
                 EditorApplication.isPlayingOrWillChangePlaymode || BuildPipeline.isBuildingPlayer)
             {
                 return;
@@ -105,7 +105,7 @@ namespace Poyo.MarshmallowJar.Editor
         internal static void ConvertActiveScene()
         {
             Scene scene = SceneManager.GetActiveScene();
-            if (!MarshmallowJarSettings.instance.sceneSetup || EditorApplication.isPlayingOrWillChangePlaymode ||
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.SceneSetup) || EditorApplication.isPlayingOrWillChangePlaymode ||
                 !scene.IsValid() || !scene.isLoaded)
             {
                 return;
@@ -128,7 +128,7 @@ namespace Poyo.MarshmallowJar.Editor
                 return;
             }
 
-            if (MarshmallowJarSettings.instance.sceneSetup)
+            if (MarshmallowJarToggles.IsOn(MarshmallowJarToggle.SceneSetup))
             {
                 string declined = SessionState.GetString(DeclinedKey, string.Empty);
                 if (Array.IndexOf(declined.Split('|'), pending) < 0)
@@ -150,7 +150,7 @@ namespace Poyo.MarshmallowJar.Editor
             }
 
             MarshmallowJarSettings settings = MarshmallowJarSettings.instance;
-            if (settings.sceneSetup && !settings.GetIgnoredSceneGuids().Contains(pending))
+            if (MarshmallowJarToggles.IsOn(MarshmallowJarToggle.SceneSetup) && !settings.GetIgnoredSceneGuids().Contains(pending))
             {
                 settings.GetIgnoredSceneGuids().Add(pending);
                 settings.SaveChanges();

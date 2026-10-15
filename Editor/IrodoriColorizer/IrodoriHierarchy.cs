@@ -1,3 +1,4 @@
+using Poyo.MarshmallowJar.Editor;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -57,9 +58,14 @@ namespace Poyo.MarshmallowJar.IrodoriColorizer.Editor
         {
             IrodoriDrawer.CaptureContextClick(selectionRect);
 
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.IrodoriColorizer))
+            {
+                return;
+            }
+
             IrodoriSettings settings = IrodoriSettings.Instance;
             // NOTE: Hierarchy は行数が多いため、無効時はキャッシュの確認すら行わない。
-            if (!settings.enabled || !settings.paintHierarchy)
+            if (!settings.paintHierarchy)
             {
                 return;
             }

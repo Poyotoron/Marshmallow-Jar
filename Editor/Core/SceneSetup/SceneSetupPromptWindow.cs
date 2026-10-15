@@ -32,7 +32,7 @@ namespace Poyo.MarshmallowJar.Editor
 
         private void OnGUI()
         {
-            if (!MarshmallowJarSettings.instance.sceneSetup)
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.SceneSetup))
             {
                 // NOTE: 確認中に機能を無効にした場合は、辞退や無視として記録せず確認だけを取り下げる。
                 SceneSetupWatcher.ClearPending();

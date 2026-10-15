@@ -35,7 +35,7 @@ namespace Poyo.MarshmallowJar.VRChat.Editor
             }
 
             _nextPollTime = now + PollInterval;
-            if (!MarshmallowJarSettings.instance.vrcSdkAutoFill || VRCSdkControlPanel.window == null)
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.VrcSdkAutoFill) || VRCSdkControlPanel.window == null)
             {
                 Unsubscribe();
                 return;
@@ -87,7 +87,7 @@ namespace Poyo.MarshmallowJar.VRChat.Editor
 
         private static void TryFill(GameObject avatar)
         {
-            if (!MarshmallowJarSettings.instance.vrcSdkAutoFill || avatar == null || _builder == null ||
+            if (!MarshmallowJarToggles.IsOn(MarshmallowJarToggle.VrcSdkAutoFill) || avatar == null || _builder == null ||
                 _builder.BuildState != SdkBuildState.Idle || _builder.UploadState != SdkUploadState.Idle ||
                 EditorApplication.isPlayingOrWillChangePlaymode || _builder.SelectedAvatar != avatar ||
                 !avatar.TryGetComponent(out PipelineManager pipeline) || !string.IsNullOrWhiteSpace(pipeline.blueprintId))
